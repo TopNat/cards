@@ -1,0 +1,83 @@
+@font-face {
+  font-family: "StratosSkyeng";
+  src: url("fonts/stratosskyengweb-regular.woff") format("woff"), url("fonts/stratosskyengweb-regular.woff2") format("woff2");
+}
+* {
+  margin: 0;
+  padding: 0;
+  background-color: #004980;
+}
+
+body {
+  font-family: "StratosSkyeng", sans-serif;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  justify-content: center;
+}
+
+.select-level {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 480px;
+  height: 459px;
+  background: #C2F5FF;
+  border-radius: 12px;
+}
+.select-level__title {
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 48px;
+  text-align: center;
+  color: #004980;
+  background: #C2F5FF;
+  margin-left: 136px;
+  margin-right: 136px;
+  margin-top: 52px;
+  margin-bottom: 48px;
+}
+.select-level__level {
+  display: flex;
+  gap: 24px;
+  background: #C2F5FF;
+  margin-bottom: 67px;
+}
+.select-level__level__item {
+  width: 98px;
+  height: 98px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  font-weight: 400;
+  font-size: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0080C1;
+}
+.select-level__level__a {
+  border-radius: 12px;
+  background: #0080C1;
+  text-decoration: none;
+}
+.select-level__start {
+  width: 246px;
+  height: 50px;
+  background: #7AC100;
+  border-radius: 12px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  color: #FFFFFF;
+  border: none;
+  outline: none;
+}
+
+/*.center {
+    padding-left: calc(50% - 600px);
+    padding-right: calc(50% - 600px);
+}*//*# sourceMappingURL=style.css.map */

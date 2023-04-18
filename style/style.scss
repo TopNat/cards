@@ -12,7 +12,7 @@
 body {
     font-family: 'StratosSkyeng', sans-serif;
 }
-.main {
+.app {
     display: flex;    
     flex-direction: column; 
     align-items: center;
@@ -75,10 +75,47 @@ body {
         border: none;
         outline: none;      
     }
+
 }
 
-/*.center {
-    padding-left: calc(50% - 600px);
-    padding-right: calc(50% - 600px);
-}*/
+.game {
+    width: 100%;    
+
+
+    &__header {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__timer {
+        margin-left: 22px;
+
+    }
+    &__cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+    }
+
+    &__start-over {
+        width: 246px;
+        height: 50px;
+        background: #7AC100;
+        border-radius: 12px;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 24px;   
+        align-items: center;
+        text-align: center;       
+        color: #FFFFFF;    
+        border: none;
+        outline: none; 
+        margin-top: 52px;
+        margin-bottom: 52px;           
+        margin-right: 22px;      
+    }
+}
 

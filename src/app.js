@@ -13,9 +13,9 @@ window.application = {
     },
 };
 function shuffle(array) {
-    console.log(array);
+    //console.log(array);
     array.sort(() => Math.random() - 0.5);
-    console.log(array);
+    //console.log(array);
 }
 
 function renderStartButton(container) {
@@ -154,7 +154,7 @@ function rendetGameScreen(container) {
 
     const countCards = DIFFICULTY[window.application.difficulty - 1];
     shuffle(CARDSLIST);
-    console.log(CARDSLIST);
+    //console.log(CARDSLIST);
 
     for (let i = 0; i < countCards; i++) {
         const divCard = document.createElement('div');
@@ -163,9 +163,16 @@ function rendetGameScreen(container) {
 
         const img = document.createElement('img');
         img.classList.add('game__card-img');
-        //img.src = 'img/card_back.jpg';
-        img.src = `img/cards/${CARDSLIST[i]}.jpg`;
+        img.src = 'img/card_back.jpg';
+        img.id = i;
+        //img.src = `img/cards/${CARDSLIST[i]}.jpg`;
+
         divCard.appendChild(img);
+
+        img.addEventListener('click', (event) => {
+            console.log(event.target.id);
+            event.target.src = `img/cards/${CARDSLIST[event.target.id]}.jpg`;
+        });
     }
 }
 window.application.screens['game'] = rendetGameScreen;

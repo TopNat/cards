@@ -1,0 +1,35 @@
+{
+    "devDependencies": {
+        "eslint": "8.38.0",
+        "eslint-config-prettier": "8.8.0",
+        "eslint-plugin-prettier": "npm4.2.1",
+        "husky": "^8.0.3",
+        "prettier": "2.8.7",
+        "stylelint": "15.5.0",
+        "stylelint-config-prettier": "9.0.4",
+        "stylelint-config-standard": "33.0.0",
+        "stylelint-prettier": "3.0.0"
+    },
+    "name": "cards",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "format": "prettier —-write ./src/",
+        "lint:js": "eslint ./src/**/*.js",
+        "lint:css": "stylelint ./style/*.scss",
+        "prepare": "husky install"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/TopNat/cards.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/TopNat/cards/issues"
+    },
+    "homepage": "https://github.com/TopNat/cards#readme",
+    "description": ""
+}

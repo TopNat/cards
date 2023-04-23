@@ -1,3 +1,48 @@
+import { slice } from 'prelude-ls';
+import '../style/style.css';
+//import '../src/app.js';
+
+const DIFFICULTY = [6, 12, 18];
+const CARDDISPLAYTIME = 2000;
+const CARDSLIST = [
+    'ace_hearts',
+    'ace_spades',
+    'ace_clubs',
+    'ace_diamonds',
+    'jack_hearts',
+    'jack_spades',
+    'jack_clubs',
+    'jack_diamonds',
+    'king_hearts',
+    'king_spades',
+    'king_clubs',
+    'king_diamonds',
+    'queen_hearts',
+    'queen_spades',
+    'queen_clubs',
+    'queen_diamonds',
+    '6_hearts',
+    '6_spades',
+    '6_clubs',
+    '6_diamonds',
+    '7_hearts',
+    '7_spades',
+    '7_clubs',
+    '7_diamonds',
+    '8_hearts',
+    '8_spades',
+    '8_clubs',
+    '8_diamonds',
+    '9_hearts',
+    '9_spades',
+    '9_clubs',
+    '9_diamonds',
+    '10_hearts',
+    '10_spades',
+    '10_clubs',
+    '10_diamonds',
+];
+
 window.application = {
     blocks: {},
     screens: {},
@@ -98,6 +143,7 @@ function renderStartOverButton(container) {
 
     button.addEventListener('click', (event) => {
         console.log('start over');
+        console.log(event);
         const app = document.querySelector('.app');
         app.style = '';
         window.application.renderScreen('level-select');
@@ -139,6 +185,69 @@ function renderHeaderGame(container) {
 }
 window.application.blocks['header-game'] = renderHeaderGame;
 
+function clearStep() {
+    window.application.step1 = '';
+    window.application.step2 = '';
+}
+
+function gameResult() {
+    if (window.application.step1 && window.application.step2) {
+        if (window.application.step1 === window.application.step2) {
+            alert('Вы выиграли!');
+            clearStep();
+        } else {
+            alert('Вы проиграли!');
+            clearStep();
+        }
+    }
+}
+
+function getArrayCards() {
+    const countCards = DIFFICULTY[window.application.difficulty - 1];
+    shuffle(CARDSLIST);
+    let cardsGame = CARDSLIST.slice(1, countCards / 2 + 1);
+    cardsGame = [...cardsGame, ...cardsGame];
+    shuffle(cardsGame);
+    window.application.cardsGame = cardsGame;
+}
+
+function showCards(container) {
+    const countCards = DIFFICULTY[window.application.difficulty - 1];
+
+    for (let i = 0; i < countCards; i++) {
+        const divCard = document.createElement('div');
+        divCard.classList.add('game__card');
+        container.appendChild(divCard);
+
+        const img = document.createElement('img');
+        img.classList.add('game__card-img');
+        img.src = `img/cards/${window.application.cardsGame[i]}.jpg`;
+        img.id = i;
+        divCard.appendChild(img);
+    }
+}
+
+function showCardBack() {
+    const imgs = document.querySelectorAll('.game__card-img');
+    imgs.forEach((img) => {
+        img.src = 'img/card_back.jpg';
+        img.addEventListener('click', (event) => {
+            event.target.src = `img/cards/${
+                window.application.cardsGame[event.target.id]
+            }.jpg`;
+
+            if (window.application.step1) {
+                window.application.step2 =
+                    window.application.cardsGame[event.target.id];
+            } else {
+                window.application.step1 =
+                    window.application.cardsGame[event.target.id];
+            }
+            setTimeout(gameResult, 1000);
+        });
+    });
+}
+
 function rendetGameScreen(container) {
     container.style = 'justify-content: start';
 
@@ -152,27 +261,12 @@ function rendetGameScreen(container) {
     divCards.classList.add('game__cards');
     div.appendChild(divCards);
 
-    const countCards = DIFFICULTY[window.application.difficulty - 1];
-    shuffle(CARDSLIST);
-    //console.log(CARDSLIST);
+    getArrayCards();
 
-    for (let i = 0; i < countCards; i++) {
-        const divCard = document.createElement('div');
-        divCard.classList.add('game__card');
-        divCards.appendChild(divCard);
+    showCards(divCards);
 
-        const img = document.createElement('img');
-        img.classList.add('game__card-img');
-        img.src = 'img/card_back.jpg';
-        img.id = i;
-        //img.src = `img/cards/${CARDSLIST[i]}.jpg`;
-
-        divCard.appendChild(img);
-
-        img.addEventListener('click', (event) => {
-            console.log(event.target.id);
-            event.target.src = `img/cards/${CARDSLIST[event.target.id]}.jpg`;
-        });
-    }
+    setTimeout(showCardBack, CARDDISPLAYTIME);
 }
 window.application.screens['game'] = rendetGameScreen;
+
+window.application.renderScreen('level-select');

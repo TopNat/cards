@@ -1,6 +1,5 @@
-import { slice } from 'prelude-ls';
+//import { slice } from 'prelude-ls';
 import '../style/style.css';
-//import '../src/app.js';
 
 const DIFFICULTY = [6, 12, 18];
 const CARDDISPLAYTIME = 2000;
@@ -58,9 +57,21 @@ window.application = {
     },
 };
 function shuffle(array) {
-    //console.log(array);
     array.sort(() => Math.random() - 0.5);
-    //console.log(array);
+}
+
+function startTimer() {
+    let secs = 0;
+    let clock = document.querySelector('.game__timer');
+    window.application.timer = setInterval(function () {
+        secs++;
+        let min = Math.floor(secs / 60);
+        let sec = secs - min * 60;
+        if (sec < 10) sec = '0' + sec;
+        if (min < 10) min = '0' + min;
+        clock.textContent = min + '.' + sec;
+        if (min === 59 && sec === 59) clearInterval(window.application.timer);
+    }, 1000);
 }
 
 function renderStartButton(container) {
@@ -191,6 +202,7 @@ function clearStep() {
 }
 
 function gameResult() {
+    clearInterval(window.application.timer);
     if (window.application.step1 && window.application.step2) {
         if (window.application.step1 === window.application.step2) {
             alert('Вы выиграли!');
@@ -266,6 +278,8 @@ function rendetGameScreen(container) {
     showCards(divCards);
 
     setTimeout(showCardBack, CARDDISPLAYTIME);
+
+    startTimer();
 }
 window.application.screens['game'] = rendetGameScreen;
 

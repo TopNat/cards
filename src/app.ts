@@ -1,5 +1,3 @@
-//import { slice } from 'prelude-ls';
-import { Input } from 'normalize-package-data';
 import '../style/style.css';
 
 const DIFFICULTY = [6, 12, 18];
@@ -70,6 +68,12 @@ window.application = {
     renderBlock: function (blockName: string, container: HTMLElement) {
         this.blocks[blockName](container);
     },
+    timer: () => {},
+    time: '',
+    step1: '',
+    step2: '',
+    difficulty: '0',
+    cardsGame: [],
 };
 function shuffle(array: string[]) {
     array.sort(() => Math.random() - 0.5);
@@ -92,8 +96,9 @@ function startTimer() {
     }, 1000);
 }
 
-function handleSubmitFormStart(event: MyEvent): void {
-    event.preventDefault();
+function handleSubmitFormStart(event: Event): void {
+    const customEvent = event as MyEvent;
+    customEvent.preventDefault();
 
     const levels: NodeListOf<HTMLInputElement> = document.querySelectorAll(
         '.select-level__radio'
@@ -117,7 +122,7 @@ function renderStartButton(container: HTMLElement) {
 
 window.application.blocks['start-button'] = renderStartButton;
 
-function handleChangeLevel(event: EventChangeLevel): void {
+function handleChangeLevel(event: Event): void {
     const radios = document.querySelectorAll('.select-level__level__item');
     radios.forEach((element: Element) => {
         element.classList.remove('select-level__level__item_select');
@@ -261,8 +266,9 @@ function showCards(container: HTMLElement) {
     }
 }
 
-function handleClickCard(event: EventClickCard): void {
-    const target = event.target as HTMLImageElement;
+function handleClickCard(event: Event): void {
+    const customEvent = event as EventClickCard;
+    const target = customEvent.target as HTMLImageElement;
     target.setAttribute(
         'src',
         `img/cards/${window.application.cardsGame[target.id]}.jpg`

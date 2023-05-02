@@ -68,6 +68,12 @@ window.application = {
     renderBlock: function (blockName: string, container: HTMLElement) {
         this.blocks[blockName](container);
     },
+    timer: () => {},
+    time: '',
+    step1: '',
+    step2: '',
+    difficulty: '0',
+    cardsGame: [],
 };
 function shuffle(array: string[]) {
     array.sort(() => Math.random() - 0.5);

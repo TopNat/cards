@@ -70,7 +70,7 @@ window.application = {
     renderBlock: function (blockName: string, container: HTMLElement) {
         this.blocks[blockName](container);
     },
-    timer: Number(), 
+    timer: setInterval(()=> {}), 
     time: '',
     step1: '',
     step2: '',

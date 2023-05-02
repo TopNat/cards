@@ -14,12 +14,12 @@ type appType = {
     screens: screens;
     renderScreen: (screen: string) => void;
     renderBlock: (blocks: string, parent: HTMLElement) => void;
-    timer: number;
+    timer: NodeJS.Timer;
     time: string;
     step1: string;
     step2: string;
     difficulty: number;
-    cardsGame: Array<String>;
+    cardsGame: Array<string>;
 };
 declare interface Window {
     application: appType;

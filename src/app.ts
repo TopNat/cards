@@ -51,13 +51,18 @@ interface EventChangeLevel extends Event {
     target: HTMLElement & { parentElement: HTMLElement | null };
 }
 
+interface EventClickCard extends Event {
+    target: HTMLElement;
+}
+
 window.application = {
     blocks: {},
     screens: {},
     renderScreen: function (screenName: string) {
-        const app = document.querySelector('.app')!;
-        if (screenName != 'game-result') app.textContent = '';
-        
+        const app = document.querySelector('.app');
+
+        if (screenName !== 'game-result' && app) app.textContent = '';
+
         if (this.screens[screenName]) {
             this.screens[screenName](app);
         }
@@ -72,16 +77,16 @@ function shuffle(array: string[]) {
 
 function startTimer() {
     let secs = 0;
-    let clock = document.querySelector('.game__timer')!;
+    const clock = document.querySelector('.game__timer');
     window.application.timer = setInterval(function () {
         secs++;
-        let min = Math.floor(secs / 60);
-        let sec = secs - min * 60;
+        const min = Math.floor(secs / 60);
+        const sec = secs - min * 60;
         let secTxt = sec.toString();
         let minTxt = min.toString();
         if (sec < 10) secTxt = '0' + secTxt;
         if (min < 10) minTxt = '0' + minTxt;
-        clock.textContent = minTxt + '.' + secTxt;
+        if (clock) clock.textContent = minTxt + '.' + secTxt;
         window.application.time = minTxt + '.' + secTxt;
         if (min === 59 && sec === 59) clearInterval(window.application.timer);
     }, 1000);
@@ -127,18 +132,17 @@ function handleChangeLevel(event: EventChangeLevel): void {
 
 function renderLevel(container: HTMLElement) {
     for (let i = 0; i < 3; i++) {
-        let labelLevel = document.createElement('label');
+        const labelLevel = document.createElement('label');
         labelLevel.classList.add('select-level__level__item');
-        let iPlus = i + 1;
-        let iStr = i.toString();
+        const iPlus = i + 1;
+        const iStr = i.toString();
         labelLevel.textContent = iPlus.toString();
-        //labelLevel.for = 'level' + iStr;
         labelLevel.setAttribute('for', 'level' + iStr);
         if (i === 0) {
             labelLevel.classList.add('select-level__level__item_select');
         }
         container.appendChild(labelLevel);
-        let levelRadio = document.createElement('input');
+        const levelRadio = document.createElement('input');
         levelRadio.classList.add('select-level__radio');
         levelRadio.id = 'level' + iStr;
         levelRadio.type = 'radio';
@@ -148,7 +152,6 @@ function renderLevel(container: HTMLElement) {
         if (i === 0) levelRadio.checked = true;
         labelLevel.appendChild(levelRadio);
     }
-
     container.addEventListener('change', handleChangeLevel);
 }
 
@@ -180,7 +183,7 @@ function renderStartOverButton(container: HTMLElement) {
     button.textContent = 'Начать заново';
     button.classList.add('game__start-over');
 
-    button.addEventListener('click', (event) => {
+    button.addEventListener('click', () => {
         window.application.renderScreen('level-select');
     });
     container.appendChild(button);
@@ -252,32 +255,31 @@ function showCards(container: HTMLElement) {
         const img = document.createElement('img');
         img.classList.add('game__card-img');
         img.src = `img/cards/${window.application.cardsGame[i]}.jpg`;
-        let iStr = i.toString();
+        const iStr = i.toString();
         img.id = iStr;
         divCard.appendChild(img);
     }
+}
+
+function handleClickCard(event: EventClickCard): void {
+    const target = event.target as HTMLImageElement;
+    target.setAttribute(
+        'src',
+        `img/cards/${window.application.cardsGame[target.id]}.jpg`
+    );
+    if (window.application.step1) {
+        window.application.step2 = window.application.cardsGame[target.id];
+    } else {
+        window.application.step1 = window.application.cardsGame[target.id];
+    }
+    setTimeout(gameResult, 1000);
 }
 
 function showCardBack() {
     const imgs = document.querySelectorAll('.game__card-img');
     imgs.forEach((img) => {
         img.setAttribute('src', 'img/card_back.jpg');
-        img.addEventListener('click', (event: Event) => {
-            let target = event.target as HTMLImageElement;
-            target.setAttribute(
-                'src',
-                `img/cards/${window.application.cardsGame[target.id]}.jpg`
-            );
-
-            if (window.application.step1) {
-                window.application.step2 =
-                    window.application.cardsGame[target.id];
-            } else {
-                window.application.step1 =
-                    window.application.cardsGame[target.id];
-            }
-            setTimeout(gameResult, 1000);
-        });
+        img.addEventListener('click', handleClickCard);
     });
 }
 
@@ -311,7 +313,7 @@ function renderStartOverResult(container: HTMLElement) {
     button.textContent = 'Начать заново';
     button.classList.add('game-result__start-over');
 
-    button.addEventListener('click', (event) => {
+    button.addEventListener('click', () => {
         window.application.renderScreen('level-select');
     });
     container.appendChild(button);

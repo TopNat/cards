@@ -57,7 +57,7 @@ window.application = {
     renderScreen: function (screenName: string) {
         const app = document.querySelector('.app')!;
         if (screenName != 'game-result') app.textContent = '';
-        console.log(screenName);
+        
         if (this.screens[screenName]) {
             this.screens[screenName](app);
         }
@@ -117,8 +117,9 @@ function handleChangeLevel(event: EventChangeLevel): void {
     radios.forEach((element: Element) => {
         element.classList.remove('select-level__level__item_select');
     });
-    if (event.target.parentElement) {
-        event.target.parentElement.classList.add(
+    const customEvent = event as EventChangeLevel;
+    if (customEvent.target.parentElement) {
+        customEvent.target.parentElement.classList.add(
             'select-level__level__item_select'
         );
     }

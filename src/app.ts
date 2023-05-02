@@ -52,27 +52,29 @@ interface EventChangeLevel extends Event {
 interface EventClickCard extends Event {
     target: HTMLElement;
 }
+const app: HTMLElement = document.querySelector('.app')!;
+
 
 window.application = {
     blocks: {},
     screens: {},
     renderScreen: function (screenName: string) {
-        const app = document.querySelector('.app');
+
 
         if (screenName !== 'game-result' && app) app.textContent = '';
 
         if (this.screens[screenName]) {
-            this.screens[screenName](app);
+            this.screens[screenName]();
         }
     },
     renderBlock: function (blockName: string, container: HTMLElement) {
         this.blocks[blockName](container);
     },
-    timer: () => {},
+    timer: Number(), 
     time: '',
     step1: '',
     step2: '',
-    difficulty: '0',
+    difficulty: Number(),
     cardsGame: [],
 };
 function shuffle(array: string[]) {
@@ -105,7 +107,7 @@ function handleSubmitFormStart(event: Event): void {
     );
 
     levels.forEach((element: HTMLInputElement) => {
-        if (element.checked) window.application.difficulty = element.value;
+        if (element.checked) window.application.difficulty = Number(element.value);
     });
     window.application.renderScreen('game');
 }
@@ -162,12 +164,12 @@ function renderLevel(container: HTMLElement) {
 
 window.application.blocks['level-radio'] = renderLevel;
 
-function rendetSelectLevelScreen(container: HTMLElement) {
-    container.style.justifyContent = 'center';
+function rendetSelectLevelScreen() {
+    app.style.justifyContent = 'center';
     const div = document.createElement('form');
     div.classList.add('select-level');
     div.action = '#';
-    container.appendChild(div);
+    app.appendChild(div);
 
     const title = document.createElement('div');
     title.classList.add('select-level__title');
@@ -269,9 +271,10 @@ function showCards(container: HTMLElement) {
 function handleClickCard(event: Event): void {
     const customEvent = event as EventClickCard;
     const target = customEvent.target as HTMLImageElement;
+    const id = Number(target.id)
     target.setAttribute(
         'src',
-        `img/cards/${window.application.cardsGame[target.id]}.jpg`
+        `img/cards/${window.application.cardsGame[id]}.jpg`
     );
     if (window.application.step1) {
         window.application.step2 = window.application.cardsGame[target.id];
@@ -289,12 +292,12 @@ function showCardBack() {
     });
 }
 
-function rendetGameScreen(container: HTMLElement) {
-    container.style.justifyContent = 'start';
+function rendetGameScreen() {
+    app.style.justifyContent = 'start';
 
     const div = document.createElement('div');
     div.classList.add('game');
-    container.appendChild(div);
+    app.appendChild(div);
 
     window.application.renderBlock('header-game', div);
 
@@ -327,12 +330,12 @@ function renderStartOverResult(container: HTMLElement) {
 
 window.application.blocks['game-result-start-over'] = renderStartOverResult;
 
-function renderGameResult(container: HTMLElement) {
-    container.style.position = 'relative';
+function renderGameResult() {
+    app.style.position = 'relative';
 
     const divApp = document.createElement('div');
     divApp.classList.add('game-result-app');
-    container.appendChild(divApp);
+    app.appendChild(divApp);
     divApp.style.position = 'absolute';
 
     const div = document.createElement('div');

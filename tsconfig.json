@@ -6,6 +6,7 @@
         "module": "es6",
         "target": "ES6",
         "allowJs": true,
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "suppressImplicitAnyIndexErrors": true,
     }
 }

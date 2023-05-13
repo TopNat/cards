@@ -6,7 +6,8 @@
         "module": "es6",
         "target": "ES6",
         "allowJs": true,
-        "moduleResolution": "node"
-       // "suppressImplicitAnyIndexErrors": true
+        "moduleResolution": "node",
+        "esModuleInterop": true
+        // "suppressImplicitAnyIndexErrors": true
     }
 }

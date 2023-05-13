@@ -41,6 +41,10 @@ const CARDSLIST = [
     '10_diamonds',
 ];
 
+function getQuantityCard(level: number) {
+    return DIFFICULTY[level - 1];
+}
+
 const app: HTMLElement = document.querySelector('.app')!;
 
 interface MyEvent extends Event {
@@ -241,7 +245,8 @@ function gameResult() {
 }
 
 function getArrayCards() {
-    const countCards = DIFFICULTY[window.application.difficulty - 1];
+    //const countCards = DIFFICULTY[window.application.difficulty - 1];
+    const countCards = getQuantityCard(window.application.difficulty);
     shuffle(CARDSLIST);
     let cardsGame = CARDSLIST.slice(1, countCards / 2 + 1);
     cardsGame = [...cardsGame, ...cardsGame];

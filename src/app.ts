@@ -1,5 +1,3 @@
-//import { slice } from 'prelude-ls';
-import { Input } from 'normalize-package-data';
 import '../style/style.css';
 
 const DIFFICULTY = [6, 12, 18];
@@ -43,6 +41,12 @@ const CARDSLIST = [
     '10_diamonds',
 ];
 
+function getQuantityCard(level: number) {
+    return DIFFICULTY[level - 1];
+}
+
+const app: HTMLElement = document.querySelector('.app')!;
+
 interface MyEvent extends Event {
     target: HTMLElement;
 }
@@ -59,17 +63,20 @@ window.application = {
     blocks: {},
     screens: {},
     renderScreen: function (screenName: string) {
-        const app = document.querySelector('.app');
-
         if (screenName !== 'game-result' && app) app.textContent = '';
-
         if (this.screens[screenName]) {
-            this.screens[screenName](app);
+            this.screens[screenName]();
         }
     },
     renderBlock: function (blockName: string, container: HTMLElement) {
         this.blocks[blockName](container);
     },
+    timer: setInterval(() => {}),
+    time: '',
+    step1: '',
+    step2: '',
+    difficulty: Number(),
+    cardsGame: [],
 };
 function shuffle(array: string[]) {
     array.sort(() => Math.random() - 0.5);
@@ -92,15 +99,17 @@ function startTimer() {
     }, 1000);
 }
 
-function handleSubmitFormStart(event: MyEvent): void {
-    event.preventDefault();
+function handleSubmitFormStart(event: Event): void {
+    const customEvent = event as MyEvent;
+    customEvent.preventDefault();
 
     const levels: NodeListOf<HTMLInputElement> = document.querySelectorAll(
         '.select-level__radio'
     );
 
     levels.forEach((element: HTMLInputElement) => {
-        if (element.checked) window.application.difficulty = element.value;
+        if (element.checked)
+            window.application.difficulty = Number(element.value);
     });
     window.application.renderScreen('game');
 }
@@ -117,7 +126,7 @@ function renderStartButton(container: HTMLElement) {
 
 window.application.blocks['start-button'] = renderStartButton;
 
-function handleChangeLevel(event: EventChangeLevel): void {
+function handleChangeLevel(event: Event): void {
     const radios = document.querySelectorAll('.select-level__level__item');
     radios.forEach((element: Element) => {
         element.classList.remove('select-level__level__item_select');
@@ -157,12 +166,12 @@ function renderLevel(container: HTMLElement) {
 
 window.application.blocks['level-radio'] = renderLevel;
 
-function rendetSelectLevelScreen(container: HTMLElement) {
-    container.style.justifyContent = 'center';
+function rendetSelectLevelScreen() {
+    app.style.justifyContent = 'center';
     const div = document.createElement('form');
     div.classList.add('select-level');
     div.action = '#';
-    container.appendChild(div);
+    app.appendChild(div);
 
     const title = document.createElement('div');
     title.classList.add('select-level__title');
@@ -236,7 +245,8 @@ function gameResult() {
 }
 
 function getArrayCards() {
-    const countCards = DIFFICULTY[window.application.difficulty - 1];
+    //const countCards = DIFFICULTY[window.application.difficulty - 1];
+    const countCards = getQuantityCard(window.application.difficulty);
     shuffle(CARDSLIST);
     let cardsGame = CARDSLIST.slice(1, countCards / 2 + 1);
     cardsGame = [...cardsGame, ...cardsGame];
@@ -261,16 +271,18 @@ function showCards(container: HTMLElement) {
     }
 }
 
-function handleClickCard(event: EventClickCard): void {
-    const target = event.target as HTMLImageElement;
+function handleClickCard(event: Event): void {
+    const customEvent = event as EventClickCard;
+    const target = customEvent.target as HTMLImageElement;
+    const id = Number(target.id);
     target.setAttribute(
         'src',
-        `img/cards/${window.application.cardsGame[target.id]}.jpg`
+        `img/cards/${window.application.cardsGame[id]}.jpg`
     );
     if (window.application.step1) {
-        window.application.step2 = window.application.cardsGame[target.id];
+        window.application.step2 = window.application.cardsGame[id].toString();
     } else {
-        window.application.step1 = window.application.cardsGame[target.id];
+        window.application.step1 = window.application.cardsGame[id].toString();
     }
     setTimeout(gameResult, 1000);
 }
@@ -283,12 +295,12 @@ function showCardBack() {
     });
 }
 
-function rendetGameScreen(container: HTMLElement) {
-    container.style.justifyContent = 'start';
+function rendetGameScreen() {
+    app.style.justifyContent = 'start';
 
     const div = document.createElement('div');
     div.classList.add('game');
-    container.appendChild(div);
+    app.appendChild(div);
 
     window.application.renderBlock('header-game', div);
 
@@ -321,12 +333,12 @@ function renderStartOverResult(container: HTMLElement) {
 
 window.application.blocks['game-result-start-over'] = renderStartOverResult;
 
-function renderGameResult(container: HTMLElement) {
-    container.style.position = 'relative';
+function renderGameResult() {
+    app.style.position = 'relative';
 
     const divApp = document.createElement('div');
     divApp.classList.add('game-result-app');
-    container.appendChild(divApp);
+    app.appendChild(divApp);
     divApp.style.position = 'absolute';
 
     const div = document.createElement('div');

@@ -16,6 +16,7 @@ type AppType = {
     step2: string;
     difficulty: number;
     cardsGame: Array<string>;
+    steps: Array<string>;
 };
 declare interface Window {
     application: AppType;

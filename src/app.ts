@@ -248,6 +248,7 @@ function gameResult() {
         if (window.application.step1 === window.application.step2) {
             window.application.steps.push(window.application.step1);
             window.application.steps.push(window.application.step2);
+
             if (
                 window.application.steps.length ===
                 window.application.cardsGame.length
@@ -296,12 +297,14 @@ function handleClickCard(event: Event): void {
         'src',
         `img/cards/${window.application.cardsGame[id]}.jpg`
     );
+
     if (window.application.step1) {
         window.application.step2 = window.application.cardsGame[id].toString();
     } else {
         window.application.step1 = window.application.cardsGame[id].toString();
     }
-    setTimeout(gameResult, 1000);
+    //setTimeout(gameResult, 1000);
+    gameResult();
 }
 
 function showCardBack() {

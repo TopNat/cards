@@ -77,6 +77,7 @@ window.application = {
     step2: '',
     difficulty: Number(),
     cardsGame: [],
+    steps: [],
 };
 function shuffle(array: string[]) {
     array.sort(() => Math.random() - 0.5);
@@ -237,10 +238,26 @@ function clearStep() {
     window.application.step2 = '';
 }
 
+function startScreenResult() {
+    clearInterval(window.application.timer);
+    window.application.renderScreen('game-result');
+}
+
 function gameResult() {
     if (window.application.step1 && window.application.step2) {
-        clearInterval(window.application.timer);
-        window.application.renderScreen('game-result');
+        if (window.application.step1 === window.application.step2) {
+            window.application.steps.push(window.application.step1);
+            window.application.steps.push(window.application.step2);
+            if (
+                window.application.steps.length ===
+                window.application.cardsGame.length
+            ) {
+                startScreenResult();
+            }
+        } else {
+            startScreenResult();
+        }
+        clearStep();
     }
 }
 
@@ -347,11 +364,14 @@ function renderGameResult() {
 
     let result = '';
     let resultTxt = '';
-    window.application.step1 === window.application.step2
+
+    window.application.steps.length === window.application.cardsGame.length
         ? ((result = 'winner'), (resultTxt = 'Вы выиграли!'))
         : ((result = 'loser'), (resultTxt = 'Вы проиграли!'));
 
     clearStep();
+    window.application.steps = [];
+
     const img = document.createElement('img');
     img.classList.add('game-result__img');
     img.setAttribute('src', `img/${result}.svg`);
